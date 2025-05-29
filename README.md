@@ -65,6 +65,7 @@ Este laboratorio permite experimentar detección, análisis y respuesta a incide
 ![image](https://github.com/user-attachments/assets/11d579a4-493e-4e2b-bb95-a58e1394139a)
 ![image](https://github.com/user-attachments/assets/8f31f2e6-2407-4dfa-a60d-ee80e7a02a81)
 ![image](https://github.com/user-attachments/assets/16b9e587-c5ab-46d8-8032-21a7f9f6b562)
+![image](https://github.com/user-attachments/assets/d3461965-556c-47fb-8c4b-dc8966ec6513)
 
 ### 1. Acceso a T-Pot
 
@@ -75,6 +76,9 @@ ssh -p xxxxx pruebas@xxx.xxx.xxx.xxx
 ### 2. Instalar Wazuh
 ![image](https://github.com/user-attachments/assets/3353459b-42ac-4d99-ba3b-aa9277db089f)
 ![image](https://github.com/user-attachments/assets/70cf85bb-ad94-4e5f-b58a-6676c6b52d15)
+![image](https://github.com/user-attachments/assets/2a3f79e1-89df-42ef-ae8e-9ac25638bc50)
+![image](https://github.com/user-attachments/assets/acc6426f-7114-4aae-8c37-1582060b4dcc)
+
 
 ```bash
 curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh
@@ -82,6 +86,7 @@ bash wazuh-install.sh -a
 ```
 
 ### 3. Configurar Agente Wazuh en T-Pot
+![image](https://github.com/user-attachments/assets/f8381762-e124-4166-a251-d6ca04eda1c4)
 
 ```bash
 wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.12.0-1_amd64.deb
