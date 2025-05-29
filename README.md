@@ -61,6 +61,10 @@ Este laboratorio permite experimentar detección, análisis y respuesta a incide
 ---
 
 ## 🛠️ Instalación Rápida
+![image](https://github.com/user-attachments/assets/4bb0ab11-07ad-49e1-9100-70a58bfcdb83)
+![image](https://github.com/user-attachments/assets/11d579a4-493e-4e2b-bb95-a58e1394139a)
+![image](https://github.com/user-attachments/assets/8f31f2e6-2407-4dfa-a60d-ee80e7a02a81)
+![image](https://github.com/user-attachments/assets/16b9e587-c5ab-46d8-8032-21a7f9f6b562)
 
 ### 1. Acceso a T-Pot
 
@@ -69,6 +73,8 @@ ssh -p xxxxx pruebas@xxx.xxx.xxx.xxx
 ```
 
 ### 2. Instalar Wazuh
+![image](https://github.com/user-attachments/assets/3353459b-42ac-4d99-ba3b-aa9277db089f)
+![image](https://github.com/user-attachments/assets/70cf85bb-ad94-4e5f-b58a-6676c6b52d15)
 
 ```bash
 curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh
@@ -130,10 +136,10 @@ agent.name: "T-pot"
 ---
 
 ## 🪪 Autor
-
-**Tu Nombre**  
-🔗 [Tu LinkedIn]  
-🐙 [Tu GitHub]
+U7Dani
+ 
+🔗 https://www.linkedin.com/in/danielsánchezgarcía/
+🐙 https://github.com/U7Dani
 
 ---
 
