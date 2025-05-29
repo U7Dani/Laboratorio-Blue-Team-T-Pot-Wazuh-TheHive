@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/ba185aa1-c9cf-4488-8d79-c1024a197e36)
+
 # 🛡️ Laboratorio Blue Team: T-Pot + Wazuh + TheHive (2025)
 
 Simulación avanzada de un entorno de ciberseguridad defensiva con honeypots reales (T-Pot), un SIEM funcional (Wazuh) y futura integración con un SOAR (TheHive).
