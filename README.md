@@ -256,6 +256,104 @@ tcp 0.0.0.0:64295 0.0.0.0:* /usr
 ![Captura de pantalla 2025-05-30 001312](https://github.com/user-attachments/assets/5de1f6a1-69bb-4a97-b12c-8afa474e44f3)
 ![Captura de pantalla 2025-05-30 001325](https://github.com/user-attachments/assets/d13a65c7-67d4-4214-bf88-0322f0161d64)
 
+# 🧠 MITRE ATT&CK en el Laboratorio Wazuh + T-Pot
+
+Este entorno documenta la integración del framework MITRE ATT&CK en un laboratorio defensivo compuesto por **Wazuh** como SIEM y **T-Pot** como plataforma de honeypots. Se muestra cómo correlacionar, visualizar y entender ataques reales mediante reglas MITRE enriquecidas.
+
+---
+
+## 🧠 ¿Qué es MITRE ATT&CK?
+
+**MITRE ATT&CK** (Adversarial Tactics, Techniques & Common Knowledge) es un marco de referencia que documenta:
+
+- Las **tácticas** utilizadas por los atacantes (lo que quieren lograr).
+- Las **técnicas** con las que lo hacen (cómo lo logran).
+- Ejemplos reales basados en inteligencia de amenazas.
+
+---
+
+## 🎯 ¿Para qué lo usamos en el laboratorio?
+
+- Correlacionar alertas de Wazuh con **tácticas y técnicas MITRE**.
+- Visualizar ataques como `Password Guessing`, `Brute Force`, `SSH`, `Data Destruction`, etc.
+- Enriquecer dashboards para **Threat Hunting**.
+- Facilitar el envío automático a **TheHive** cuando se detectan técnicas específicas.
+- Aplicar contramedidas basadas en las recomendaciones del framework (Mitigations).
+
+---
+
+## 📊 ¿Cómo se visualiza en Wazuh?
+
+Wazuh permite visualizar MITRE ATT&CK desde múltiples ángulos:
+
+- **Dashboards** con evolución temporal por técnica y táctica.
+- **Distribución por agentes** (honeypots vs endpoints).
+- **Paneles de inteligencia** para aplicar mitigaciones.
+- **Exploración táctica** completa con IDs MITRE como `T1110.001`, `T1021.004`, etc.
+
+---
+
+## 📸 Visualizaciones del laboratorio
+
+### 1. Evolución y distribución por táctica/técnica
+
+Se observa la evolución en el tiempo de ataques clasificados por MITRE, destacando técnicas como `Password Guessing` y tácticas como `Credential Access` y `Lateral Movement`. También se muestran los agentes involucrados.
+![Captura de pantalla 2025-05-31 000708](https://github.com/user-attachments/assets/c3b44af1-9e98-4541-808a-2192f461bef6)
+
+---
+
+### 2. Panel de Mitigaciones
+
+Sección de **Mitigations** con recomendaciones específicas para contrarrestar cada técnica, como configuración de GPOs, restricciones de ejecución, antivirus o segmentación de red.
+![Captura de pantalla 2025-05-31 000724](https://github.com/user-attachments/assets/883eaa52-bb93-4fcb-b3a5-71796099062b)
+
+---
+
+### 3. Framework MITRE completo
+
+Visualización completa de tácticas y técnicas con contador de alertas. Permite identificar las técnicas más explotadas en el entorno (`T1110`, `T1021.004`, `T1485`, etc.).
+
+![Captura de pantalla 2025-05-31 000738](https://github.com/user-attachments/assets/c0d2a17f-8a75-4f8e-97c7-027650e093e0)
+
+---
+
+
+### 4. Vista detallada de eventos
+
+Muestra eventos individuales asociados a MITRE: `agent.name`, `rule.mitre.id`, `description`, `rule.level`, ideal para análisis forense.
+![Captura de pantalla 2025-05-31 000752](https://github.com/user-attachments/assets/378cb5df-b18b-479c-b941-630d0bd1f03a)
+
+---
+
+### 5. Threat Hunting overview
+
+Resumen general del entorno: volumen total de alertas, autenticaciones fallidas, agentes involucrados, alertas por severidad y técnicas MITRE más frecuentes.
+![Captura de pantalla 2025-05-31 000804](https://github.com/user-attachments/assets/8966ce3c-7be5-4d57-84c1-46612f8f11e0)
+
+---
+
+### 6. Logs enriquecidos con MITRE y severidad
+
+Exploración de logs enriquecidos con niveles (`rule.level`), descripciones (`sshd: authentication failed`), IDs MITRE (`T1110.001`), etc.
+![Captura de pantalla 2025-05-31 000818](https://github.com/user-attachments/assets/e3efa982-d492-4a9e-a6b9-b323b0816b30)
+
+---
+
+### 7. Panel de vulnerabilidades
+
+Complementa el análisis con información sobre CVEs presentes en el sistema (ej. `CVE-2025-3576`) y paquetes afectados, conectando amenazas detectadas con vulnerabilidades reales.
+![Captura de pantalla 2025-05-31 000832](https://github.com/user-attachments/assets/009fa6d9-be80-4559-9e35-4aaa6ac4d868)
+
+---
+
+## 🧩 Resultado
+
+Gracias a esta integración, el laboratorio ahora cuenta con una vista integral de los ataques detectados, categorizados bajo el marco MITRE, facilitando la investigación, visualización y respuesta.
+
+Este entorno puede ampliarse con:
+- Envío automático a TheHive vía Webhook
+- Dashboards personalizados
+- Automatización de respuestas según MITRE tactic detectada
 
 ## 📌 Licencia
 
