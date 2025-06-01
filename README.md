@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/ba185aa1-c9cf-4488-8d79-c1024a197e36)
+![image](https://github.com/user-attachments/assets/cfa327ca-466e-4915-af2d-cf948af5f2a7)
+
 
 # 🛡️ Laboratorio Blue Team: T-Pot + Wazuh + TheHive (2025)
 
