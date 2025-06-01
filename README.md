@@ -355,6 +355,210 @@ Este entorno puede ampliarse con:
 - Dashboards personalizados
 - Automatización de respuestas según MITRE tactic detectada
 
+
+# 🚀 Integración de TheHive en Laboratorio de Ciberseguridad (Wazuh + T-Pot + TheHive)
+
+## 🧩 Arquitectura del laboratorio
+
+| Componente | Función                                   | Ejemplo de acceso              |
+|------------|-------------------------------------------|--------------------------------|
+| 🐝 TheHive  | SOAR (gestión de alertas e incidentes)    | http://<thehive-ip>:9000       |
+| 📈 Wazuh    | SIEM (detección y generación de alertas)  | https://<wazuh-ip>             |
+| 🪤 T-Pot    | Honeypots con Suricata y ELK              | <tpot-ip>                      |
+
+---
+
+## 1️⃣ Preparación del entorno
+
+### 🔸 Requisitos mínimos
+
+- Ubuntu 22.04 LTS
+- Docker y Docker Compose
+- Usuario con permisos sudo
+- Conexión a Internet
+
+![image](https://github.com/user-attachments/assets/0dd9172a-0dda-440b-ba65-576bf7bda364)
+![image](https://github.com/user-attachments/assets/f28ca23e-ec76-4e42-8c1e-7e8a34b681aa)
+![image](https://github.com/user-attachments/assets/7f4f0ecd-3ad9-4e8d-aedd-618d30447e0a)
+
+---
+
+## 2️⃣ Instalación de TheHive con Docker
+
+```bash
+# 1. Crear usuario de trabajo (opcional)
+sudo adduser thehiveuser
+sudo usermod -aG sudo thehiveuser
+su - thehiveuser
+
+# 2. Instalar Docker y Docker Compose
+sudo apt update && sudo apt install -y docker.io docker-compose
+sudo systemctl enable docker
+
+# 3. Crear directorio de trabajo
+mkdir ~/thehive && cd ~/thehive
+```
+
+---
+
+## 📄 docker-compose.yml
+
+Guarda este archivo como `docker-compose.yml` en el directorio `~/thehive/`:
+
+```yaml
+version: "3.7"
+services:
+  cassandra:
+    image: cassandra:3
+    container_name: cassandra
+    networks:
+      - thehive
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    environment:
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+
+  thehive:
+    image: strangebee/thehive:5
+    container_name: thehive
+    depends_on:
+      - cassandra
+    ports:
+      - "9000:9000"
+    networks:
+      - thehive
+    volumes:
+      - thehive-data:/opt/thehive/data
+      - thehive-config:/opt/thehive/conf
+    environment:
+      - CASSANDRA_CONTACT_POINT=cassandra
+      - START_WAIT_FOR_CASSANDRA=true
+
+networks:
+  thehive:
+
+volumes:
+  cassandra-data:
+  thehive-data:
+  thehive-config:
+```
+
+### ▶️ Arranque
+
+```bash
+docker compose up -d
+```
+
+---
+
+## 3️⃣ Configuración inicial de TheHive
+
+1. Accede a `http://<tu-ip>:9000`
+2. Crea el primer usuario administrador
+3. Configura la organización y genera una API Key (no la publiques)
+
+---
+
+## 4️⃣ Integración de alertas desde Wazuh
+
+### 🧪 Método: Webhook + Script Python personalizado
+
+#### 📄 Script Python personalizado
+
+Guarda este script como `/var/ossec/integrations/custom-w2thive.py` en el servidor de Wazuh:
+
+```python
+#!/usr/bin/env python3
+import json
+import sys
+import requests
+
+def send_alert_to_thehive(alert):
+    url = "http://<THEHIVE_IP>:9000/api/alert"  # Sustituye con tu IP privada o localhost
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer <YOUR_API_KEY>"  # Sustituye con tu clave privada
+    }
+    response = requests.post(url, headers=headers, data=json.dumps(alert), verify=False)
+    print(response.status_code, response.text)
+
+if __name__ == "__main__":
+    alert = json.load(sys.stdin)
+    send_alert_to_thehive(alert)
+```
+
+💡 Asegúrate de que el script tenga permisos de ejecución:
+```bash
+chmod +x /var/ossec/integrations/custom-w2thive.py
+```
+
+---
+
+### ⚙️ Fragmento para `ossec.conf`
+
+Edita el archivo `/var/ossec/etc/ossec.conf` y añade dentro de `<ossec_config>`:
+
+```xml
+<integration>
+  <name>custom-w2thive.py</name>
+  <hook_url>http://localhost:9000/api/alert</hook_url>
+  <level>5</level>
+  <alert_format>json</alert_format>
+</integration>
+```
+
+Reinicia Wazuh para aplicar los cambios:
+
+```bash
+sudo systemctl restart wazuh-manager
+```
+
+---
+
+## 5️⃣ Verificación
+
+- Lanza un ataque de prueba desde T-Pot (por ejemplo, escaneo Nmap)
+- Observa la alerta en Wazuh
+- Confirma que llega automáticamente a TheHive
+- Comprueba que se clasifica correctamente con campos como `severity`, `agent`, `rule.id`, etc.
+
+---
+
+## 6️⃣ (Opcional) Persistencia del contenedor
+
+Para que TheHive se reinicie automáticamente tras apagado del sistema:
+
+```bash
+docker update --restart unless-stopped thehive
+```
+
+---
+
+## 📁 Sugerencia de estructura del repositorio
+
+```
+thehive-integration-lab/
+├── docker/
+│   └── docker-compose.yml
+├── docs/
+│   └── README.md
+│   └── ossec.conf
+│   └── custom-w2thive.py
+```
+
+---
+
+## ✅ Notas finales
+
+- Sustituye `<THEHIVE_IP>` y `<YOUR_API_KEY>` en tus archivos.
+- No publiques nunca tu API Key ni IP pública en GitHub.
+- Puedes mejorar el script para ejecutar acciones según severidad, integrarlo con MISP, Cortex, etc.
+
+---
+
+
+
 ## 📌 Licencia
 
 Esta documentación se proporciona bajo la Licencia MIT. T-Pot está disponible bajo su propia licencia de código abierto en [https://github.com/telekom-security/tpotce](https://github.com/telekom-security/tpotce).
